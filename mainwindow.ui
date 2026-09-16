@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Serial terminal https://iblink.link</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -20,30 +20,37 @@
       <property name="title">
        <string/>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="4">
+        <widget class="QComboBox" name="parityCb"/>
+       </item>
+       <item row="0" column="0">
         <widget class="QComboBox" name="portCB"/>
        </item>
-       <item>
+       <item row="0" column="3">
+        <widget class="QComboBox" name="dataBitsCb"/>
+       </item>
+       <item row="0" column="1">
         <widget class="QPushButton" name="connectBtn">
          <property name="text">
-          <string>PushButton</string>
+          <string>Connect</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="0" column="2">
         <widget class="QComboBox" name="baudRateCb"/>
        </item>
-       <item>
-        <widget class="QComboBox" name="dataBitsCb"/>
-       </item>
-       <item>
-        <widget class="QComboBox" name="parityCb"/>
-       </item>
-       <item>
+       <item row="0" column="5">
         <widget class="QComboBox" name="stopBitsCb"/>
        </item>
-       <item>
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="localEchoCb">
+         <property name="text">
+          <string>Local echo</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="6" rowspan="2">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string/>
@@ -119,11 +126,196 @@
          </layout>
         </widget>
        </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="clearConsolePb">
+         <property name="text">
+          <string>Clear Console</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
     <item>
-     <widget class="QPlainTextEdit" name="console"/>
+     <widget class="QPlainTextEdit" name="console">
+      <property name="palette">
+       <palette>
+        <active>
+         <colorrole role="Light">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Text">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>143</red>
+            <green>240</green>
+            <blue>164</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="HighlightedText">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>222</red>
+            <green>221</green>
+            <blue>218</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="AlternateBase">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>192</red>
+            <green>191</green>
+            <blue>188</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="PlaceholderText">
+          <brush brushstyle="SolidPattern">
+           <color alpha="128">
+            <red>143</red>
+            <green>240</green>
+            <blue>164</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </active>
+        <inactive>
+         <colorrole role="Light">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Text">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>143</red>
+            <green>240</green>
+            <blue>164</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="HighlightedText">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>222</red>
+            <green>221</green>
+            <blue>218</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="AlternateBase">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>192</red>
+            <green>191</green>
+            <blue>188</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="PlaceholderText">
+          <brush brushstyle="SolidPattern">
+           <color alpha="128">
+            <red>143</red>
+            <green>240</green>
+            <blue>164</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </inactive>
+        <disabled>
+         <colorrole role="Light">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Text">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>190</red>
+            <green>190</green>
+            <blue>190</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>239</red>
+            <green>239</green>
+            <blue>239</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="HighlightedText">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>222</red>
+            <green>221</green>
+            <blue>218</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="AlternateBase">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>192</red>
+            <green>191</green>
+            <blue>188</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="PlaceholderText">
+          <brush brushstyle="SolidPattern">
+           <color alpha="128">
+            <red>0</red>
+            <green>0</green>
+            <blue>0</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </disabled>
+       </palette>
+      </property>
+      <property name="font">
+       <font>
+        <family>Courier New</family>
+       </font>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -133,7 +325,7 @@
      <x>0</x>
      <y>0</y>
      <width>1025</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

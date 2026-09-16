@@ -39,6 +39,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pin_RI_Cb->setAttribute(Qt::WA_TransparentForMouseEvents, true);
     ui->pin_RI_Cb->setFocusPolicy(Qt::NoFocus);
 
+    ui->pin_DTR_Cb->setEnabled(false);
+    ui->pin_RTS_Cb->setEnabled(false);
+    ui->pin_TxD_Cb->setEnabled(false);
+
     // Event filters for port refresh on expand and console key transmission
     ui->portCB->installEventFilter(this);
     ui->console->installEventFilter(this);
@@ -51,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // Signal / Slot connections
     connect(ui->connectBtn, &QPushButton::clicked, this, &MainWindow::toggleConnection);
+    connect(ui->clearConsolePb, &QPushButton::clicked, ui->console, &QPlainTextEdit::clear);
     connect(&m_serial, &QSerialPort::readyRead, this, &MainWindow::onReadyRead);
     connect(&m_serial, &QSerialPort::bytesWritten, this, &MainWindow::onBytesWritten);
     connect(&m_serial, &QSerialPort::errorOccurred, this, &MainWindow::handleError);
@@ -88,27 +93,32 @@ bool MainWindow::eventFilter(QObject *watched, QEvent *event)
     } else if (watched == ui->console) {
         if (event->type() == QEvent::KeyPress) {
             auto *keyEvent = static_cast<QKeyEvent*>(event);
+            if (keyEvent->matches(QKeySequence::Copy)) {
+                return QMainWindow::eventFilter(watched, event);
+            }
             if (m_serial.isOpen()) {
+                QByteArray data;
                 if (keyEvent->matches(QKeySequence::Paste)) {
                     const QClipboard *clipboard = QGuiApplication::clipboard();
                     if (clipboard) {
-                        QByteArray data = clipboard->text().toUtf8();
-                        if (!data.isEmpty()) {
-                            m_serial.write(data);
-                        }
+                        data = clipboard->text().toUtf8();
                     }
+                } else if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
+                    data = "\r";
                 } else {
-                    QByteArray data;
-                    if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
-                        data = "\r";
-                    } else {
-                        data = keyEvent->text().toUtf8();
-                    }
-                    if (!data.isEmpty()) {
-                        m_serial.write(data);
+                    data = keyEvent->text().toUtf8();
+                }
+
+                if (!data.isEmpty()) {
+                    m_serial.write(data);
+                    if (ui->localEchoCb->isChecked()) {
+                        ui->console->moveCursor(QTextCursor::End);
+                        ui->console->insertPlainText(QString::fromUtf8(data));
+                        ui->console->moveCursor(QTextCursor::End);
                     }
                 }
             }
+            return true;
         }
     }
     return QMainWindow::eventFilter(watched, event);
@@ -202,6 +212,10 @@ void MainWindow::openSerialPort()
         m_bytesSent = 0;
         m_bytesReceived = 0;
 
+        ui->pin_DTR_Cb->setEnabled(true);
+        ui->pin_RTS_Cb->setEnabled(true);
+        ui->pin_TxD_Cb->setEnabled(true);
+
         m_serial.setDataTerminalReady(ui->pin_DTR_Cb->isChecked());
         m_serial.setRequestToSend(ui->pin_RTS_Cb->isChecked());
         m_serial.setBreakEnabled(ui->pin_TxD_Cb->isChecked());
@@ -234,6 +248,10 @@ void MainWindow::closeSerialPort()
     ui->pin_DSR_Cb->setChecked(false);
     ui->pin_CTS_Cb->setChecked(false);
     ui->pin_RI_Cb->setChecked(false);
+
+    ui->pin_DTR_Cb->setEnabled(false);
+    ui->pin_RTS_Cb->setEnabled(false);
+    ui->pin_TxD_Cb->setEnabled(false);
 
     updateStatusBar();
 }
@@ -334,6 +352,7 @@ void MainWindow::saveSettings()
     settings.setValue("dataBits", ui->dataBitsCb->currentData());
     settings.setValue("parity", ui->parityCb->currentData());
     settings.setValue("stopBits", ui->stopBitsCb->currentData());
+    settings.setValue("localEcho", ui->localEchoCb->isChecked());
     settings.setValue("dtr", ui->pin_DTR_Cb->isChecked());
     settings.setValue("rts", ui->pin_RTS_Cb->isChecked());
     settings.setValue("txd", ui->pin_TxD_Cb->isChecked());
@@ -382,6 +401,9 @@ void MainWindow::loadSettings()
         }
     }
 
+    if (settings.contains("localEcho")) {
+        ui->localEchoCb->setChecked(settings.value("localEcho").toBool());
+    }
     if (settings.contains("dtr")) {
         ui->pin_DTR_Cb->setChecked(settings.value("dtr").toBool());
     }

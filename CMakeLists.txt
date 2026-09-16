@@ -9,7 +9,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
+find_package(QT NAMES Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets SerialPort)
 
 set(PROJECT_SOURCES
@@ -56,3 +56,15 @@ install(TARGETS serial-terminal
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(serial-terminal)
 endif()
+
+
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(CPACK_GENERATOR "DEB")
+    set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Maintainer <maintainer@example.com>")
+    set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+elseif(WIN32)
+    set(CPACK_GENERATOR "NSIS")
+endif()
+
+include(CPack)
