@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Serial Terminal
+Comment=Serial Terminal
+Exec=serial-terminal
+Icon=serial-terminal
+Terminal=false
+Categories=Development;Utility;
