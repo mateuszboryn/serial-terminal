@@ -21,6 +21,10 @@ set(PROJECT_SOURCES
         mainwindow.ui
 )
 
+if(WIN32)
+    list(APPEND PROJECT_SOURCES assets_windows/app.rc)
+endif()
+
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(serial-terminal
         MANUAL_FINALIZATION
@@ -54,6 +58,20 @@ install(TARGETS serial-terminal
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    install(FILES assets_linux/serial-terminal.desktop
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/applications
+    )
+    install(FILES img/icon256.png
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/icons/hicolor/256x256/apps
+        RENAME serial-terminal.png
+    )
+    install(FILES img/icon256.png
+        DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/pixmaps
+        RENAME serial-terminal.png
+    )
+endif()
 
 if(WIN32)
     find_program(WINDEPLOYQT_EXECUTABLE windeployqt HINTS "${QT_CMAKE_DIR}/../../../bin" "${_qt5Core_install_prefix}/bin")
@@ -104,6 +122,8 @@ elseif(WIN32)
     set(CPACK_NSIS_PACKAGE_NAME "Serial Terminal")
     set(CPACK_NSIS_DISPLAY_NAME "Serial Terminal")
     set(CPACK_NSIS_ENABLE_UNINSTALL_BEFORE_INSTALL ON)
+    set(CPACK_NSIS_MUI_ICON "${CMAKE_CURRENT_SOURCE_DIR}/img/icon256.ico")
+    set(CPACK_NSIS_MUI_UNIICON "${CMAKE_CURRENT_SOURCE_DIR}/img/icon256.ico")
 endif()
 
 include(CPack)

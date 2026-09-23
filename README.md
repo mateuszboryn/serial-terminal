@@ -1,6 +1,6 @@
 # Serial Terminal
 
-![Serial Terminal](img.png)
+![Serial Terminal](img/img.png)
 
 A simple, fast, and cross-platform RS-232 serial terminal application for serial communication, device control, and debugging.
 
