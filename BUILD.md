@@ -77,31 +77,20 @@ ldd cmake-build-release-system/serial-terminal
 - **CMake & Ninja**: CMake 3.16+ and Ninja build system.
 - **NSIS (Nullsoft Scriptable Install System)**: Required for building Windows installer packages (`makensis.exe` in PATH or standard installation directory `C:\Program Files (x86)\NSIS`).
 
-## Visual Studio Redistributable (VCRedist) for `msvc2019_64`
-
-The application requires the Microsoft Visual C++ 2015–2022 Redistributable (`x64`) runtime.
-
-### Download Links
-- **Direct Download (Official Microsoft URL)**: [https://aka.ms/vs/17/release/vc_redist.x64.exe](https://aka.ms/vs/17/release/vc_redist.x64.exe) (or [https://aka.ms/vs/16/release/vc_redist.x64.exe](https://aka.ms/vs/16/release/vc_redist.x64.exe))
-- **Documentation & Supported Versions**: [https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
-
-### Download via PowerShell
-To download `vc_redist.x64.exe` using PowerShell:
-
-```powershell
-Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vc_redist.x64.exe" -OutFile "vc_redist.x64.exe"
-```
-
-### Download via Command Line (curl)
-```shell
-curl -L -o vc_redist.x64.exe https://aka.ms/vs/17/release/vc_redist.x64.exe
-```
+### Visual Studio Redistributable (VCRedist) for `msvc2019_64`
 
 > **Note**: During CMake configuration on Windows, CMake locates the Visual Studio redistributable package from the local MSVC directory (`MSVC_REDIST_DIR`) without requiring internet access.
+
+- **Direct Download (Official Microsoft URL)**: [https://aka.ms/vs/17/release/vc_redist.x64.exe](https://aka.ms/vs/17/release/vc_redist.x64.exe) (or [https://aka.ms/vs/16/release/vc_redist.x64.exe](https://aka.ms/vs/16/release/vc_redist.x64.exe))
+- **Documentation & Supported Versions**: [https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
 
 ## Build
 
 Open the **x64 Native Tools Command Prompt for VS** (or load `VsDevCmd.bat -arch=x64`) and run:
+
+```shell
+$env:Path = $env:Path + ";C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin" 
+```
 
 ```shell
 cmake -B cmake-build-release -DCMAKE_BUILD_TYPE=Release -G Ninja
